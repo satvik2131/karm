@@ -1,0 +1,20 @@
+IMP Question for Preparing Asssignment Test 
+CS 305 OOPM
+-----------------------------------
+
+Q.1. What is Object oriented programming? How is it different from procedure oriented programming?
+Q.2. Explain various features of OOP.
+Q.3. What are the different elements of an object model?Explain.
+Q.4  Explain Merits & Demerits of OOP ?
+Q.5 Discuss various applications in OOPM ?
+Q.6  Explain different object models.
+Q.7 Explain various features of OOP.
+Q.8 What do you understand by aggregation?Define them with Examples.
+Q.9 What is puepose of class diagram?Describe the icons used for class relationship. How can we use object as software model?
+Q.10 Explain about association between objects by giveng proper example.
+Q.11 Discuss aggregation Vs generalization.
+Q.12 Explain the following:
+a) Object model
+b) Dynamic model
+c) Functional model
+d) relationship between the different model
