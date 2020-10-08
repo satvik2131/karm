@@ -1,10 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const mongo = require('./config/database');
-const session = require('express-session'); 
 const cookieParser = require('cookie-parser');
-const flash = require('connect-flash')
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 //Set pages
 const pages = require('./routes/pages.js');
@@ -61,19 +59,8 @@ app.use('/',pages);
 app.use(cookieParser('keyboard cat'));
 
 //Express-Sessions
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }
-  }))
-//Connect-Flash config
-app.use(flash());
 
 
-
-//setting global error variable
-app.locals.errors = null; 
 
 
 // ##############

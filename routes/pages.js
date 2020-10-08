@@ -3,16 +3,33 @@ const router = express.Router();
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const auth = require('../middleware/auth')
-const jwt = require('jsonwebtoken')
-const app = express()
+const jwt = require('jsonwebtoken');
+const session = require('express-session'); 
+
+
+//Middleware for sessions
+router.use(
+    session({
+      key: "user_sid",
+      secret: "somerandonstuffs",
+      resave: false,
+      saveUninitialized: false,
+      
+    })
+  );
+
+
+
+// router.use((req,res,next)=>{
+//     req.session.token;
+//     next();
+// })
 
 router.get('/',async (req,res)=>{
     res.render('index',{
         title:'Home'
     });
 })
-
-
 
 //Register route
 router.get('/register',async (req,res)=>{
@@ -68,7 +85,8 @@ router.get('/login', (req,res)=>{
 })
 
 //LOGIN VALIDATION
-router.post('/login', async function(req,res){
+router.post('/login', async function(req,res,next){
+
     try{
         const user = await User.findOne({email: req.body.Email})
          
@@ -82,12 +100,10 @@ router.post('/login', async function(req,res){
             throw new Error('unable to login')
         }
 
-        const tokens = user.getAuthTokens()
-        // app.set('Authorization',tokens)
-        app
-
-        res.redirect('/profile')
-
+        const token = await user.getAuthTokens();
+        req.session.token = await token;
+        res.redirect('/profile');
+        
     }catch(e){
 
        console.log(e)
@@ -98,16 +114,11 @@ router.post('/login', async function(req,res){
     }
 })
 
-router.get('/profile' ,async (req,res)=>{ 
+router.get('/profile' , auth ,async (req,res)=>{ 
     try{
-        // console.log(req.headers)
-        // const token = await app.get('Authorization')
-        // const decoded =  jwt.verify(token, 'superisupar')
-        // const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
-
         res.render('profile',{
             title:'profile',
-            name: user.first_name
+            name: req.user.first_name
         })
 
     }catch(e){
@@ -116,7 +127,7 @@ router.get('/profile' ,async (req,res)=>{
 
 })
 
-router.get('/logout',async (req,res)=>{
+router.get('/logout', auth ,async (req,res)=>{
     try{
         req.user.tokens = req.user.tokens.filter((token)=>{
             return token.token !== req.token
@@ -128,7 +139,19 @@ router.get('/logout',async (req,res)=>{
         res.status(500).send()
     }
     
+});
+
+router.get('/profile/cart', auth ,async (req,res,next)=>{
+    if(!req.user){
+        return res.redirect('/login');
+    }
+
+    res.render('cart',{
+        title:'Product',
+    })
 })
+
+
 
 
 //Exports
